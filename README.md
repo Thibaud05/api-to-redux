@@ -1,5 +1,5 @@
 # api-to-redux
-A simple class for consume api in React with Redux
+A simple class for consume REST API in React with Redux
 
 # How use it ?
 
