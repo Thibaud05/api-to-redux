@@ -32,3 +32,6 @@ apiCompany.updateResource({id:1,name:'Google'})
 apiCompany.deleteResource(1)
 // return an action REMOVE_COMPANIES
 ```
+## Todo
+- Add nested resources
+- Add authentification
