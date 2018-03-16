@@ -1,6 +1,12 @@
 # api-to-redux
 A simple class for consume REST API in React with Redux
 
+## Requirements
+- React
+- Redux
+- Redux-thunk
+- Whatwg-fetch
+
 ## How use it ?
 
 ```javascript
