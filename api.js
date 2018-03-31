@@ -5,8 +5,13 @@ class API
     constructor(resourceName)
     {
         this.url = 'https://api.awesome.com/'
+       this.resourceName = resourceName
         this.resourceType = '_' + resourceName.toUpperCase()
         this.ressourceUrl = this.url + resourceName + '/'
+    }
+
+    nested(resourceName,resourceId){
+        this.ressourceUrl = this.url + resourceName + '/' + resourceId + '/' + this.resourceName + '/'
     }
 
     fetchResource()
@@ -23,6 +28,7 @@ class API
                 )
         }
     }
+    
     requestResource()
     {
         return {
@@ -30,6 +36,7 @@ class API
             loading : true
         }
     }
+    
     receiveResource(data)
     {
         return {
@@ -39,23 +46,26 @@ class API
         }
     }
 
-
-
-    addResource(resource)
+    addResource(resource,useJson = true)
     {
         return (dispatch) => {
-            return fetch(this.ressourceUrl, {
+            let param = {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(resource)
-            })
+                body: resource
+            }
+            if(useJson){
+                param.headers = {'Content-Type': 'application/json'}
+                param.body = JSON.stringify(resource)
+            }else{
+                param.body = this.objToFormData(resource)
+            }
+            return fetch(this.ressourceUrl, param)
                 .then(response => response.json())
-                .then(json => {
-                    dispatch(this.addResourceSuccess(json))
-                })
+                .then(json => {dispatch(this.addResourceSuccess(json))})
                 .catch(ex => console.log('parsing failed', ex))
         }
     }
+    
     addResourceSuccess(data)
     {
         return {
@@ -64,30 +74,33 @@ class API
         }
     }
 
-
-    updateResource(resource)
+    updateResource(resource,useJson = true)
     {
         return (dispatch) => {
-            return fetch(this.ressourceUrl + resource.id, {
+            let param = {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(resource)
-            })
+                body: resource
+            }
+            if(useJson){
+                param.headers = {'Content-Type': 'application/json'}
+                param.body = JSON.stringify(resource)
+            }else{
+                param.body = this.objToFormData(resource)
+            }
+            return fetch(this.ressourceUrl + resource.id, param)
                 .then(response => response.json())
                 .then(json => {dispatch(this.updateResourceSuccess(json))})
                 .catch(ex => console.log('parsing failed', ex))
         }
     }
-    updateResourceSuccess (company)
+    
+    updateResourceSuccess (resource)
     {
         return {
             type: 'UPDATE' + this.resourceType,
-            payload : company
+            payload : resource
         }
     }
-
 
     deleteResource(id)
     {
@@ -103,6 +116,7 @@ class API
                 .catch(ex => console.log('parsing failed', ex))
         }
     }
+    
     deleteResourceSuccess(id)
     {
         return {
@@ -111,6 +125,14 @@ class API
         }
     }
 
-}
+    objToFormData(obj){
+        let formData = new FormData()
+        for (let props in obj){
+            if (obj.hasOwnProperty(props))
+                formData.append(props, obj[props])
 
+        }
+        return formData
+    }
+}
 export default API
