@@ -5,7 +5,8 @@ class API
     constructor(resourceName)
     {
         this.url = 'https://api.awesome.com/'
-       this.resourceName = resourceName
+        this.useJWT = useJWT
+        this.resourceName = resourceName
         this.resourceType = '_' + resourceName.toUpperCase()
         this.ressourceUrl = this.url + resourceName + '/'
     }
@@ -14,11 +15,48 @@ class API
         this.ressourceUrl = this.url + resourceName + '/' + resourceId + '/' + this.resourceName + '/'
     }
 
-    fetchResource()
+    getToken(){
+        return 'Bearer ' + localStorage.getItem("token")
+    }
+
+    setToken(token){
+        localStorage.setItem('token', token);
+    }
+
+    login(credential)
     {
         return (dispatch) => {
             dispatch(this.requestResource())
-            return fetch(this.ressourceUrl)
+            return fetch(this.ressourceUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: credential.email,
+                    password: credential.password,
+                })
+            })
+            .then(response => response.json())
+            .then(json => {
+                if(json.token){
+                    dispatch(this.receiveResource({isLogged:true}))
+                    this.setToken(json.token)
+                }else{
+                    dispatch(this.errorResource(json[0]))
+                }
+            })
+            .catch(ex => console.log('parsing failed', ex))
+        }
+    }
+
+    fetchResource(id='')
+    {
+        return (dispatch) => {
+            dispatch(this.requestResource())
+            return fetch(this.ressourceUrl + id,{
+                headers: {'Authorization': this.getToken()}
+            })
                 .then(
                     response => response.json(),
                     error => console.log('An error occurred.', error)
@@ -28,7 +66,16 @@ class API
                 )
         }
     }
-    
+
+    errorResource(data)
+    {
+        return {
+            type: 'ERROR' + this.resourceType,
+            data : data,
+            loading : false
+        }
+    }
+
     requestResource()
     {
         return {
@@ -36,7 +83,6 @@ class API
             loading : true
         }
     }
-    
     receiveResource(data)
     {
         return {
@@ -45,6 +91,7 @@ class API
             loading : false
         }
     }
+
 
     addResource(resource,useJson = true)
     {
@@ -65,7 +112,6 @@ class API
                 .catch(ex => console.log('parsing failed', ex))
         }
     }
-    
     addResourceSuccess(data)
     {
         return {
@@ -73,6 +119,7 @@ class API
             payload : data
         }
     }
+
 
     updateResource(resource,useJson = true)
     {
@@ -93,7 +140,6 @@ class API
                 .catch(ex => console.log('parsing failed', ex))
         }
     }
-    
     updateResourceSuccess (resource)
     {
         return {
@@ -101,6 +147,7 @@ class API
             payload : resource
         }
     }
+
 
     deleteResource(id)
     {
@@ -116,7 +163,6 @@ class API
                 .catch(ex => console.log('parsing failed', ex))
         }
     }
-    
     deleteResourceSuccess(id)
     {
         return {
@@ -134,5 +180,7 @@ class API
         }
         return formData
     }
+
 }
+
 export default API
