@@ -1,14 +1,18 @@
 import 'whatwg-fetch'
+import {type} from "../actions/type";
+
+import actions from "./apiActions"
 
 class API
 {
-    constructor(resourceName)
+    constructor(resourceName,useJWT=false)
     {
         this.url = 'https://api.awesome.com/'
         this.useJWT = useJWT
         this.resourceName = resourceName
         this.resourceType = '_' + resourceName.toUpperCase()
         this.ressourceUrl = this.url + resourceName + '/'
+        this.actions = new actions(this.resourceType)
     }
 
     nested(resourceName,resourceId){
@@ -26,7 +30,7 @@ class API
     login(credential)
     {
         return (dispatch) => {
-            dispatch(this.requestResource())
+            dispatch(this.actions.requestResource())
             return fetch(this.ressourceUrl, {
                 method: 'POST',
                 headers: {
@@ -40,10 +44,10 @@ class API
             .then(response => response.json())
             .then(json => {
                 if(json.token){
-                    dispatch(this.receiveResource({isLogged:true}))
+                    dispatch(this.actions.receiveResource({isLogged:true}))
                     this.setToken(json.token)
                 }else{
-                    dispatch(this.errorResource(json[0]))
+                    dispatch(this.actions.errorResource(json[0]))
                 }
             })
             .catch(ex => console.log('parsing failed', ex))
@@ -53,7 +57,7 @@ class API
     fetchResource(id='')
     {
         return (dispatch) => {
-            dispatch(this.requestResource())
+            dispatch(this.actions.requestResource())
             return fetch(this.ressourceUrl + id,{
                 headers: {'Authorization': this.getToken()}
             })
@@ -62,37 +66,11 @@ class API
                     error => console.log('An error occurred.', error)
                 )
                 .then(json =>
-                    dispatch(this.receiveResource(json))
+                    dispatch(this.actions.receiveResource(json))
                 )
         }
     }
-
-    errorResource(data)
-    {
-        return {
-            type: 'ERROR' + this.resourceType,
-            data : data,
-            loading : false
-        }
-    }
-
-    requestResource()
-    {
-        return {
-            type: 'REQUEST' + this.resourceType,
-            loading : true
-        }
-    }
-    receiveResource(data)
-    {
-        return {
-            type: 'RECEIVE' + this.resourceType,
-            data : data,
-            loading : false
-        }
-    }
-
-
+    
     addResource(resource,useJson = true)
     {
         return (dispatch) => {
@@ -108,18 +86,10 @@ class API
             }
             return fetch(this.ressourceUrl, param)
                 .then(response => response.json())
-                .then(json => {dispatch(this.addResourceSuccess(json))})
+                .then(json => {dispatch(this.actions.addResourceSuccess(json))})
                 .catch(ex => console.log('parsing failed', ex))
         }
     }
-    addResourceSuccess(data)
-    {
-        return {
-            type: 'CREATE' + this.resourceType,
-            payload : data
-        }
-    }
-
 
     updateResource(resource,useJson = true)
     {
@@ -136,19 +106,10 @@ class API
             }
             return fetch(this.ressourceUrl + resource.id, param)
                 .then(response => response.json())
-                .then(json => {dispatch(this.updateResourceSuccess(json))})
+                .then(json => {dispatch(this.actions.updateResourceSuccess(json))})
                 .catch(ex => console.log('parsing failed', ex))
         }
     }
-    updateResourceSuccess (resource)
-    {
-        return {
-            type: 'UPDATE' + this.resourceType,
-            payload : resource
-        }
-    }
-
-
     deleteResource(id)
     {
         return (dispatch) => {
@@ -159,15 +120,8 @@ class API
                 },
             })
                 .then(response => response.json())
-                .then(json => {dispatch(this.deleteResourceSuccess(id))})
+                .then(json => {dispatch(this.actions.deleteResourceSuccess(id))})
                 .catch(ex => console.log('parsing failed', ex))
-        }
-    }
-    deleteResourceSuccess(id)
-    {
-        return {
-            type: 'REMOVE' + this.resourceType,
-            payload : id
         }
     }
 
