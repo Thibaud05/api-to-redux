@@ -1,13 +1,13 @@
 import 'whatwg-fetch'
-import {type} from "../actions/type";
 
+import config from "./apiConfig"
 import actions from "./apiActions"
 
 class API
 {
     constructor(resourceName,useJWT=false)
     {
-        this.url = 'https://api.awesome.com/'
+        this.url = config.url + '/' + config.version
         this.useJWT = useJWT
         this.resourceName = resourceName
         this.resourceType = '_' + resourceName.toUpperCase()
@@ -70,7 +70,7 @@ class API
                 )
         }
     }
-    
+
     addResource(resource,useJson = true)
     {
         return (dispatch) => {
