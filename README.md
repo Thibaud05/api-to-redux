@@ -7,7 +7,8 @@ A simple class for consume REST API in React with Redux
 - Redux-thunk
 - Whatwg-fetch
 
-## How use it ?
+# How use it ?
+## Fetch, create, update and remove a ressource
 
 ```javascript
 // Create an api resource
@@ -38,5 +39,14 @@ apiCompany.updateResource({id:1,name:'Google'})
 apiCompany.deleteResource(1)
 // return an action REMOVE_COMPANIES
 ```
+## Nested route
+- Todo
+
+## File upload
+- Todo
+
+## JWT authentification
+- Todo
+
 ## Todo
 - Add authentification
