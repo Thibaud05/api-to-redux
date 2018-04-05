@@ -36,7 +36,7 @@ apiCompany.updateResource({id:1,name:'Google'})
 
 ```javascript
 apiCompany.deleteResource(1)
-// HTTPS DELETE api.awesome.com/companies
+// HTTPS DELETE api.awesome.com/companies/1
 // return an action REMOVE_COMPANIES
 ```
 ## Nested route
@@ -68,8 +68,9 @@ apiLeaders.updateResource({id:1,name:'Sundar Pichai'})
 ```
 
 ```javascript
+apiLeaders.nested('companies',1)
 apiLeaders.deleteResource(1)
-// HTTPS DELETE api.awesome.com/companies/1/leaders
+// HTTPS DELETE api.awesome.com/companies/1/leaders/1
 // return an action REMOVE_LEADERS
 ```
 
