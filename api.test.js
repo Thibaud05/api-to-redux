@@ -39,7 +39,7 @@ describe('TEST REST API CRUD', () => {
         })
     })
 
-     it('addResource()', () => {
+    it('addResource()', () => {
         const param = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{"name":"Amazon"}' }
 
         fetchMock
@@ -51,14 +51,11 @@ describe('TEST REST API CRUD', () => {
                 response: {id:1,name:'Amazon'}
             })
 
-        const expectedActions = [
-            { type: 'CREATE_COMPANIES', payload: {id:1, name:'Amazon'}  },
-        ]
         const store = mockStore()
 
         return store.dispatch(testApi.addResource({name:'Amazon'})).then(() => {
 
-            expect(store.getActions()).toEqual(expectedActions)
+            expect(store.getActions()).toEqual([{ type: 'CREATE_COMPANIES', payload: {id:1, name:'Amazon'} }])
         })
     })
 
@@ -74,14 +71,31 @@ describe('TEST REST API CRUD', () => {
                 response: {id:1,name:'Google'}
             })
 
-        const expectedActions = [
-            { type: 'UPDATE_COMPANIES', payload: {id:1, name:'Google'}  },
-        ]
         const store = mockStore()
 
         return store.dispatch(testApi.updateResource({id:1,name:'Google'})).then(() => {
 
-            expect(store.getActions()).toEqual(expectedActions)
+            expect(store.getActions()).toEqual([{ type: 'UPDATE_COMPANIES', payload: {id:1, name:'Google'} }])
+        })
+    })
+
+    it('deleteResource()', () => {
+        const param = { method: 'DELETE', headers: { 'Content-Type': 'application/json' }}
+
+        fetchMock
+            .deleteOnce({
+                matcher: function(url, opts) {
+                    expect(opts).toEqual(param)
+                    return (url === (testApi.ressourceUrl + '1'));
+                },
+                response: {id:1}
+            })
+
+        const store = mockStore()
+
+        return store.dispatch(testApi.deleteResource(1)).then(() => {
+
+            expect(store.getActions()).toEqual([{ type: 'REMOVE_COMPANIES', payload: 1  }])
         })
     })
 })
