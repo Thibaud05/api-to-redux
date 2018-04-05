@@ -39,12 +39,11 @@ describe('TEST REST API CRUD', () => {
         })
     })
 
-    it('addResource()', () => {
+     it('addResource()', () => {
         const param = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{"name":"Amazon"}' }
 
         fetchMock
             .postOnce({
-                name: 'LoginSuccess',
                 matcher: function(url, opts) {
                     expect(opts).toEqual(param)
                     return (url === testApi.ressourceUrl);
@@ -58,6 +57,29 @@ describe('TEST REST API CRUD', () => {
         const store = mockStore()
 
         return store.dispatch(testApi.addResource({name:'Amazon'})).then(() => {
+
+            expect(store.getActions()).toEqual(expectedActions)
+        })
+    })
+
+    it('updateResource()', () => {
+        const param = { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: '{"id":1,"name":"Google"}' }
+
+        fetchMock
+            .putOnce({
+                matcher: function(url, opts) {
+                    expect(opts).toEqual(param)
+                    return (url === (testApi.ressourceUrl + '1'));
+                },
+                response: {id:1,name:'Google'}
+            })
+
+        const expectedActions = [
+            { type: 'UPDATE_COMPANIES', payload: {id:1, name:'Google'}  },
+        ]
+        const store = mockStore()
+
+        return store.dispatch(testApi.updateResource({id:1,name:'Google'})).then(() => {
 
             expect(store.getActions()).toEqual(expectedActions)
         })
