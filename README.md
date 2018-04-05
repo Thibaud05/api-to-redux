@@ -16,37 +16,65 @@ let apiCompany = new API('companies')
 ```
 
 ```javascript
-// HTTPS GET api.awesome.com/companies
 apiCompany.fetchResource()
+// HTTPS GET api.awesome.com/companies
 // return an action REQUEST_COMPANIES
 // return an action RECEIVE_COMPANIES
 ```
 
 ```javascript
-// HTTPS POST api.awesome.com/companies
 apiCompany.addResource({name:'Amazon'})
+// HTTPS POST api.awesome.com/companies
 // return an action CREATE_COMPANIES
 ```
 
 ```javascript
-// HTTPS PUT api.awesome.com/companies
 apiCompany.updateResource({id:1,name:'Google'})
+// HTTPS PUT api.awesome.com/companies
 // return an action UPDATE_COMPANIES
 ```
 
 ```javascript
-// HTTPS DELETE api.awesome.com/companies
 apiCompany.deleteResource(1)
+// HTTPS DELETE api.awesome.com/companies
 // return an action REMOVE_COMPANIES
 ```
 ## Nested route
-- Todo
+```javascript
+// Create an api resource
+let apiLeaders = new API('leaders')
+```
+
+```javascript
+apiLeaders.nested('companies',1)
+apiLeaders.fetchResource()
+// HTTPS GET api.awesome.com/companies/1/leaders
+// return an action REQUEST_LEADERS
+// return an action RECEIVE_LEADERS
+```
+
+```javascript
+apiLeaders.nested('companies',1)
+apiLeaders.addResource({name:'Larry Page'})
+// HTTPS POST api.awesome.com/companies/1/leaders
+// return an action CREATE_LEADERS
+```
+
+```javascript
+apiLeaders.nested('companies',1)
+apiLeaders.updateResource({id:1,name:'Sundar Pichai'})
+// HTTPS PUT api.awesome.com/companies/1/leaders
+// return an action UPDATE_LEADERS
+```
+
+```javascript
+apiLeaders.deleteResource(1)
+// HTTPS DELETE api.awesome.com/companies/1/leaders
+// return an action REMOVE_LEADERS
+```
 
 ## File upload
 - Todo
 
 ## JWT authentification
 - Todo
-
-## Todo
-- Add authentification
