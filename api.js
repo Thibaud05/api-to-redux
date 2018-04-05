@@ -15,16 +15,9 @@ class API
         this.actions = new actions(this.resourceType)
     }
 
-    nested(resourceName,resourceId){
+    nested(resourceName,resourceId)
+    {
         this.ressourceUrl = this.url + resourceName + '/' + resourceId + '/' + this.resourceName + '/'
-    }
-
-    getToken(){
-        return 'Bearer ' + localStorage.getItem("token")
-    }
-
-    setToken(token){
-        localStorage.setItem('token', token);
     }
 
     login(credential)
@@ -58,9 +51,9 @@ class API
     {
         return (dispatch) => {
             dispatch(this.actions.requestResource())
-            return fetch(this.ressourceUrl + id,{
-                headers: {'Authorization': this.getToken()}
-            })
+            let param = this.getParam('GET')
+            console.log(param)
+            return fetch(this.ressourceUrl + id,param)
                 .then(
                     response => response.json(),
                     error => console.log('An error occurred.', error)
@@ -74,16 +67,7 @@ class API
     addResource(resource,useJson = true)
     {
         return (dispatch) => {
-            let param = {
-                method: 'POST',
-                body: resource
-            }
-            if(useJson){
-                param.headers = {'Content-Type': 'application/json'}
-                param.body = JSON.stringify(resource)
-            }else{
-                param.body = this.objToFormData(resource)
-            }
+            let param = this.getParam('POST',useJson,resource)
             return fetch(this.ressourceUrl, param)
                 .then(response => response.json())
                 .then(json => {dispatch(this.actions.addResourceSuccess(json))})
@@ -94,38 +78,47 @@ class API
     updateResource(resource,useJson = true)
     {
         return (dispatch) => {
-            let param = {
-                method: 'PUT',
-                body: resource
-            }
-            if(useJson){
-                param.headers = {'Content-Type': 'application/json'}
-                param.body = JSON.stringify(resource)
-            }else{
-                param.body = this.objToFormData(resource)
-            }
+            let param = this.getParam('PUT',useJson,resource)
             return fetch(this.ressourceUrl + resource.id, param)
                 .then(response => response.json())
                 .then(json => {dispatch(this.actions.updateResourceSuccess(json))})
                 .catch(ex => console.log('parsing failed', ex))
         }
     }
+
     deleteResource(id)
     {
         return (dispatch) => {
-            return fetch(this.ressourceUrl + id, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            })
+            const param = this.getParam('DELETE')
+            return fetch(this.ressourceUrl + id, param)
                 .then(response => response.json())
                 .then(json => {dispatch(this.actions.deleteResourceSuccess(id))})
                 .catch(ex => console.log('parsing failed', ex))
         }
     }
 
-    objToFormData(obj){
+    getParam(method,useJson = true,resource=null)
+    {
+        let param = {method: method, headers: {}}
+        if(useJson) {
+            param.headers['Content-Type'] = 'application/json'
+            if (resource) {
+                param.body = JSON.stringify(resource)
+            }
+        }else{
+            if (resource) {
+                param.body = this.objToFormData(resource)
+            }
+        }
+        if(this.useJWT){
+            param.headers['Authorization'] = this.getToken()
+        }
+
+        return param
+    }
+
+    objToFormData(obj)
+    {
         let formData = new FormData()
         for (let props in obj){
             if (obj.hasOwnProperty(props))
@@ -133,6 +126,16 @@ class API
 
         }
         return formData
+    }
+
+    getToken()
+    {
+        return 'Bearer ' + localStorage.getItem("token")
+    }
+
+    setToken(token)
+    {
+        localStorage.setItem('token', token);
     }
 
 }
