@@ -6,6 +6,8 @@ A simple class for consume REST API in React with Redux
 - Redux
 - Redux-thunk
 - Whatwg-fetch
+- redux-mock-store
+- fetch-mock
 
 # How use it ?
 ## Fetch, create, update and remove a ressource
