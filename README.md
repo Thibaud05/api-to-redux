@@ -12,34 +12,22 @@ A simple class for consume REST API in React with Redux
 # How use it ?
 ## Fetch, create, update and remove a ressource
 
+First define your url and version in `apiConfig.js`
+
 ```javascript
-// Create an api resource
 let apiCompany = new API('companies')
-```
 
-```javascript
 apiCompany.fetchResource()
-// HTTPS GET api.awesome.com/companies
-// return an action REQUEST_COMPANIES
-// return an action RECEIVE_COMPANIES
-```
+// HTTPS GET api.awesome.com/companies, dispatch REQUEST_COMPANIES and RECEIVE_COMPANIES
 
-```javascript
 apiCompany.addResource({name:'Amazon'})
-// HTTPS POST api.awesome.com/companies
-// return an action CREATE_COMPANIES
-```
+// HTTPS POST api.awesome.com/companies and dispatch CREATE_COMPANIES
 
-```javascript
 apiCompany.updateResource({id:1,name:'Google'})
-// HTTPS PUT api.awesome.com/companies
-// return an action UPDATE_COMPANIES
-```
+// HTTPS PUT api.awesome.com/companies and dispatch UPDATE_COMPANIES
 
-```javascript
 apiCompany.deleteResource(1)
-// HTTPS DELETE api.awesome.com/companies/1
-// return an action REMOVE_COMPANIES
+// HTTPS DELETE api.awesome.com/companies/1 and dispatch REMOVE_COMPANIES
 ```
 ## Nested route
 ```javascript
