@@ -51,8 +51,8 @@ apiLeaders.deleteResource(1)
 
 ## JWT authentification
 ```javascript
-let apiLogin = new API('auth')
-apiLogin.login(credential)
+let apiAuth = new API('auth')
+apiAuth.login(credential)
 // HTTPS POST api.awesome.com/login, dispatch REQUEST_AUTH and RECEIVE_AUTH
 // Store the token in the localStorage
 
