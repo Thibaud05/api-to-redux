@@ -5,14 +5,19 @@ import actions from "./apiActions"
 
 class API
 {
-    constructor(resourceName,useJWT=false)
+    constructor(resourceName)
     {
         this.url = config.url + '/' + config.version
-        this.useJWT = useJWT
+        this.useJWT = false
         this.resourceName = resourceName
         this.resourceType = '_' + resourceName.toUpperCase()
         this.ressourceUrl = this.url + resourceName + '/'
         this.actions = new actions(this.resourceType)
+    }
+
+    auth()
+    {
+        this.useJWT = true
     }
 
     nested(resourceName,resourceId)
