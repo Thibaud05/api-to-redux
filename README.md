@@ -20,7 +20,7 @@ let apiCompany = new API('companies')
 apiCompany.fetchResource()
 // HTTPS GET api.awesome.com/companies, dispatch REQUEST_COMPANIES and RECEIVE_COMPANIES
 
-apiCompany.addResource({name:'Larry Page'})
+apiCompany.addResource({name:'Amazon'})
 // HTTPS POST api.awesome.com/companies and dispatch CREATE_COMPANIES
 
 apiCompany.updateResource({id:1,name:'Google'})
@@ -37,7 +37,7 @@ apiLeaders.nested('companies',1)
 apiLeaders.fetchResource()
 // HTTPS GET api.awesome.com/companies/1/leaders, dispatch REQUEST_LEADERS and RECEIVE_LEADERS
 
-apiLeaders.addResource({name:'Amazon'})
+apiLeaders.addResource({name:'Larry Page'})
 // HTTPS POST api.awesome.com/companies/1/leaders and dispatch CREATE_LEADERS
 
 apiLeaders.updateResource({id:1,name:'Sundar Pichai'})
