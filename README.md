@@ -51,6 +51,7 @@ apiLeaders.deleteResource(1)
 
 ## JWT authentification
 ```javascript
+const credential = {email: 'e@mail.com', password: 'secure'}
 let apiAuth = new API('auth')
 apiAuth.login(credential)
 // HTTPS POST api.awesome.com/login, dispatch REQUEST_AUTH and RECEIVE_AUTH
