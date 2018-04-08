@@ -97,5 +97,21 @@ describe('TEST REST API CRUD', () => {
 
             expect(store.getActions()).toEqual([{ type: 'REMOVE_COMPANIES', payload: 1  }])
         })
+        
+        it('nested()', () => {
+
+            const nestedApi = new API('leaders')
+            nestedApi.nested('companies',1)
+
+            expect(nestedApi.resourceType).toBe('_LEADERS');
+            expect(nestedApi.ressourceUrl).toBe('http://127.0.0.1:3333/companies/1/leaders/');
+        });
+
+        it('auth()', () => {
+
+            const authApi = new API('leaders')
+            authApi.auth()
+            expect(authApi.useJWT).toBe(true);
+        });
     })
 })
