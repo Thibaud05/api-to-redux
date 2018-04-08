@@ -50,4 +50,14 @@ apiLeaders.deleteResource(1)
 - Todo
 
 ## JWT authentification
-- Todo
+```javascript
+let apiLogin = new API('auth')
+apiLogin.login(credential)
+// HTTPS POST api.awesome.com/login, dispatch REQUEST_AUTH and RECEIVE_AUTH
+// Store the token in the localStorage
+
+let apiCompany = new API('companies')
+apiCompany.auth()
+apiCompany.fetchResource()
+// HTTPS GET api.awesome.com/companies, dispatch REQUEST_COMPANIES and RECEIVE_COMPANIES
+```
