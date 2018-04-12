@@ -61,5 +61,13 @@ apiLeaders.updateResource({id:1,name:'Sundar Pichai'})
 apiLeaders.deleteResource(1)
 // HTTPS DELETE api.awesome.com/companies/1/leaders/1 and dispatch REMOVE_LEADERS
 ```
+
 ## File upload
-- Todo
+```javascript
+let apiCompany = new API('companies')
+const useJson = false
+const pictureFile = event.target.files[0]
+// get the picture file with onChange on <imput type="file" onChange={onChangeFile} >
+apiLeaders.addResource({name:'Larry Page',picture:pictureFile},useJson)
+// HTTPS POST api.awesome.com/companies/1/leaders and dispatch CREATE_LEADERS
+```
