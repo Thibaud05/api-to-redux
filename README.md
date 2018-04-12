@@ -29,6 +29,21 @@ apiCompany.updateResource({id:1,name:'Google'})
 apiCompany.deleteResource(1)
 // HTTPS DELETE api.awesome.com/companies/1 and dispatch REMOVE_COMPANIES
 ```
+
+## JWT authentification
+```javascript
+const credential = {email: 'e@mail.com', password: 'secure'}
+let apiAuth = new API('auth')
+apiAuth.login(credential)
+// HTTPS POST api.awesome.com/login, dispatch REQUEST_AUTH and RECEIVE_AUTH
+// Store the token in the localStorage
+
+let apiCompany = new API('companies')
+apiCompany.auth()
+apiCompany.fetchResource()
+// HTTPS GET api.awesome.com/companies, dispatch REQUEST_COMPANIES and RECEIVE_COMPANIES
+```
+
 ## Nested route
 ```javascript
 let apiLeaders = new API('leaders')
@@ -48,17 +63,3 @@ apiLeaders.deleteResource(1)
 ```
 ## File upload
 - Todo
-
-## JWT authentification
-```javascript
-const credential = {email: 'e@mail.com', password: 'secure'}
-let apiAuth = new API('auth')
-apiAuth.login(credential)
-// HTTPS POST api.awesome.com/login, dispatch REQUEST_AUTH and RECEIVE_AUTH
-// Store the token in the localStorage
-
-let apiCompany = new API('companies')
-apiCompany.auth()
-apiCompany.fetchResource()
-// HTTPS GET api.awesome.com/companies, dispatch REQUEST_COMPANIES and RECEIVE_COMPANIES
-```
