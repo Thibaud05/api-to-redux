@@ -3,18 +3,29 @@ import 'whatwg-fetch'
 import config from "./apiConfig"
 import actions from "./apiActions"
 
+/** Call a REST API and get Redux action */
 class API
 {
+    /**
+     * Create an action generator
+     * @param  {string} resourceName - the name of the REST resource
+     */
     constructor(resourceName)
     {
-        this.url = config.url + '/' + config.version
-        this.useJWT = false
         this.resourceName = resourceName
-        this.resourceType = '_' + resourceName.toUpperCase()
-        this.ressourceUrl = this.url + resourceName + '/'
-        this.actions = new actions(this.resourceType)
-    }
+        this.useJWT = false
 
+        // Build base url
+        this.url = config.url + '/' + config.version
+        this.ressourceUrl = this.url + resourceName + '/'
+
+        // Build actions
+        this.actions = new actions(resourceName)
+    }
+    /**
+     * Create an action generator
+     * @param  {string} resourceType - the type of the resource
+     */
     auth()
     {
         this.useJWT = true
@@ -57,8 +68,7 @@ class API
         return (dispatch) => {
             dispatch(this.actions.requestResource())
             let param = this.getParam('GET')
-            console.log(param)
-            return fetch(this.ressourceUrl + id,param)
+            return fetch(this.ressourceUrl + id, param)
                 .then(
                     response => response.json(),
                     error => console.log('An error occurred.', error)
