@@ -3,11 +3,11 @@ class actions
 {
     /**
      * Create an action generator
-     * @param  {string} resourceType - the type of the resource
+     * @param  {string} resourceName - the name of the REST resource
      */
-    constructor(resourceType)
+    constructor(resourceName)
     {
-        this.resourceType = resourceType
+        this.resourceType = '_' + resourceName.toUpperCase()
     }
     /**
      * Action dispatch when log failed
