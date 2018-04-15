@@ -7,7 +7,7 @@ import actions from "./apiActions"
 class API
 {
     /**
-     * Create an action generator
+     * Create a resource
      * @param  {string} resourceName - the name of the REST resource
      */
     constructor(resourceName)
@@ -17,38 +17,44 @@ class API
 
         // Build base url
         this.url = config.url + '/' + config.version
+
         this.ressourceUrl = this.url + resourceName + '/'
 
         // Build actions
         this.actions = new actions(resourceName)
     }
     /**
-     * Create an action generator
-     * @param  {string} resourceType - the type of the resource
+     * Active the JWT authentication
+     * Add token in the header when api make request
      */
     auth()
     {
         this.useJWT = true
     }
-
+    /**
+     * Create a nested resource
+     * @param  {string} resourceName - the name of the REST resource
+     * @param  {number} resourceId - the id of the REST resource
+     */
     nested(resourceName,resourceId)
     {
         this.ressourceUrl = this.url + resourceName + '/' + resourceId + '/' + this.resourceName + '/'
     }
-
+    /**
+     * Get and store the auth token
+     * @param  {object} credential - User credential
+     * @param  {string} credential.email - User email
+     * @param  {string} credential.password - User password
+     * @return {object} a redux action
+     */
     login(credential)
     {
         return (dispatch) => {
             dispatch(this.actions.requestResource())
             return fetch(this.ressourceUrl, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: credential.email,
-                    password: credential.password,
-                })
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(credential)
             })
             .then(response => response.json())
             .then(json => {
@@ -62,7 +68,11 @@ class API
             .catch(ex => console.log('parsing failed', ex))
         }
     }
-
+    /**
+     * Get all items for a resource or get an item resource by id
+     * @param  {string} id - the resource id
+     * @return {object} a redux action
+     */
     fetchResource(id='')
     {
         return (dispatch) => {
@@ -78,7 +88,12 @@ class API
                 )
         }
     }
-
+    /**
+     * Get all items for a resource or get an item resource by id
+     * @param  {object} resource - An object representing the resource
+     * @param  {boolean} useJson - For use json format in the request
+     * @return {object} a redux action
+     */
     addResource(resource,useJson = true)
     {
         return (dispatch) => {
@@ -90,6 +105,12 @@ class API
         }
     }
 
+    /**
+     * Update a resource by id
+     * @param  {object} resource - An object representing the resource
+     * @param  {number} resource.id - resource id
+     * @param  {boolean} useJson - For use json format in the request
+     */
     updateResource(resource,useJson = true)
     {
         return (dispatch) => {
@@ -100,7 +121,11 @@ class API
                 .catch(ex => console.log('parsing failed', ex))
         }
     }
-
+    /**
+     * Delete the resource item by id
+     * @param  {number} id - the resource id
+     * @return {object} a redux action
+     */
     deleteResource(id)
     {
         return (dispatch) => {
@@ -111,8 +136,14 @@ class API
                 .catch(ex => console.log('parsing failed', ex))
         }
     }
-
-    getParam(method,useJson = true,resource=null)
+    /**
+     * Create the parameters for http request
+     * @param  {string} method - HTTP request method
+     * @param  {boolean} useJson - For use json format in the request
+     * @param  {object} resource - An object representing the resource
+     * @return {object} fetch param
+     */
+    getParam(method, useJson = true, resource = null)
     {
         let param = {method: method, headers: {}}
         if(useJson) {
@@ -131,8 +162,12 @@ class API
 
         return param
     }
-
-    objToFormData(obj)
+    /**
+     * Set the authenticate token
+     * @param  {object} obj - form data
+     * @return {object} FormData
+     */
+    static objToFormData(obj)
     {
         let formData = new FormData()
         for (let props in obj){
@@ -142,13 +177,19 @@ class API
         }
         return formData
     }
-
-    getToken()
+    /**
+     * Get the authenticate token
+     * @return {string} Token
+     */
+    static getToken()
     {
         return 'Bearer ' + localStorage.getItem("token")
     }
-
-    setToken(token)
+    /**
+     * Set the authenticate token
+     * @param  {string} token - JWT token
+     */
+    static setToken(token)
     {
         localStorage.setItem('token', token);
     }
