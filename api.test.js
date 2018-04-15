@@ -28,7 +28,7 @@ describe('TEST REST API CRUD', () => {
         expect(testApi.ressourceUrl).toBe('http://127.0.0.1:3333/companies/');
     });
 
-    it('get()', () => {
+    it('read()', () => {
         fetchMock
             .getOnce(testApi.ressourceUrl, { body: { companies: ['do something'] }, headers: { 'content-type': 'application/json' } })
 
@@ -38,7 +38,7 @@ describe('TEST REST API CRUD', () => {
         ]
         const store = mockStore()
 
-        return store.dispatch(testApi.get()).then(() => {
+        return store.dispatch(testApi.read()).then(() => {
 
             expect(store.getActions()).toEqual(expectedActions)
         })
@@ -148,7 +148,7 @@ describe('TEST REST API CRUD', () => {
     const testApiWithAuth = new API('companies')
     testApiWithAuth.auth()
 
-    it('get with auth', () => {
+    it('read with auth', () => {
         fetchMock
             .getOnce(testApiWithAuth.ressourceUrl, { body: { companies: ['do something'] }, headers: { 'content-type': 'application/json' } })
 
@@ -158,7 +158,7 @@ describe('TEST REST API CRUD', () => {
         ]
         const store = mockStore()
 
-        return store.dispatch(testApiWithAuth.get()).then(() => {
+        return store.dispatch(testApiWithAuth.read()).then(() => {
 
             expect(store.getActions()).toEqual(expectedActions)
         })
