@@ -17,14 +17,14 @@ First define your url and version in `apiConfig.js`
 ```javascript
 let apiCompany = new API('companies')
 
-apiCompany.get()
-// HTTPS GET api.awesome.com/companies, dispatch REQUEST_COMPANIES and RECEIVE_COMPANIES
-
 apiCompany.create({name:'Amazon'})
 // HTTPS POST api.awesome.com/companies and dispatch CREATE_COMPANIES
 
 apiCompany.update({id:1,name:'Google'})
 // HTTPS PUT api.awesome.com/companies and dispatch UPDATE_COMPANIES
+
+apiCompany.read()
+// HTTPS GET api.awesome.com/companies, dispatch REQUEST_COMPANIES and RECEIVE_COMPANIES
 
 apiCompany.delete(1)
 // HTTPS DELETE api.awesome.com/companies/1 and dispatch REMOVE_COMPANIES
@@ -49,14 +49,14 @@ apiCompany.get()
 let apiLeaders = new API('leaders')
 apiLeaders.nested('companies',1)
 
-apiLeaders.get()
-// HTTPS GET api.awesome.com/companies/1/leaders, dispatch REQUEST_LEADERS and RECEIVE_LEADERS
-
 apiLeaders.create({name:'Larry Page'})
 // HTTPS POST api.awesome.com/companies/1/leaders and dispatch CREATE_LEADERS
 
 apiLeaders.update({id:1,name:'Sundar Pichai'})
 // HTTPS PUT api.awesome.com/companies/1/leaders and dispatch UPDATE_LEADERS
+
+apiLeaders.read()
+// HTTPS GET api.awesome.com/companies/1/leaders, dispatch REQUEST_LEADERS and RECEIVE_LEADERS
 
 apiLeaders.delete(1)
 // HTTPS DELETE api.awesome.com/companies/1/leaders/1 and dispatch REMOVE_LEADERS
