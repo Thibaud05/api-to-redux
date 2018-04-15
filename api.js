@@ -60,7 +60,7 @@ class API
             .then(json => {
                 if(json.token){
                     dispatch(this.actions.receiveResource({isLogged:true}))
-                    this.setToken(json.token)
+                    API.setToken(json.token)
                 }else{
                     dispatch(this.actions.errorResource(json[0]))
                 }
@@ -153,11 +153,11 @@ class API
             }
         }else{
             if (resource) {
-                param.body = this.objToFormData(resource)
+                param.body = API.objToFormData(resource)
             }
         }
         if(this.useJWT){
-            param.headers['Authorization'] = this.getToken()
+            param.headers['Authorization'] = API.getToken()
         }
 
         return param
