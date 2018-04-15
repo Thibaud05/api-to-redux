@@ -183,5 +183,48 @@ describe('TEST REST API CRUD', () => {
             expect(store.getActions()).toEqual([{ type: 'CREATE_COMPANIES', payload: {id:1, name:'Amazon'} }])
         })
     })
+
+
+    it('updateResource() with auth', () => {
+        const param = { method: 'PUT', headers: { 'Content-Type': 'application/json',Authorization: 'Bearer ' + token }, body: '{"id":1,"name":"Google"}' }
+
+        fetchMock
+            .putOnce({
+                matcher: function(url, opts) {
+                    expect(opts).toEqual(param)
+                    return (url === (testApiWithAuth.ressourceUrl + '1'));
+                },
+                response: {id:1,name:'Google'}
+            })
+
+        const store = mockStore()
+
+        return store.dispatch(testApiWithAuth.updateResource({id:1,name:'Google'})).then(() => {
+
+            expect(store.getActions()).toEqual([{ type: 'UPDATE_COMPANIES', payload: {id:1, name:'Google'} }])
+        })
+    })
+
+    it('deleteResource() with auth', () => {
+        const param = { method: 'DELETE', headers: { 'Content-Type': 'application/json' ,Authorization: 'Bearer ' + token }}
+
+        fetchMock
+            .deleteOnce({
+                matcher: function(url, opts) {
+                    expect(opts).toEqual(param)
+                    return (url === (testApiWithAuth.ressourceUrl + '1'));
+                },
+                response: {id:1}
+            })
+
+        const store = mockStore()
+
+        return store.dispatch(testApiWithAuth.deleteResource(1)).then(() => {
+
+            expect(store.getActions()).toEqual([{ type: 'REMOVE_COMPANIES', payload: 1  }])
+        })
+    })
+
+
 })
 
