@@ -72,7 +72,7 @@ class API
      * @param  {string} id - the resource id
      * @return {object} a redux action
      */
-    get(id='')
+    read(id='')
     {
         return (dispatch) => {
             dispatch(this.actions.requestResource())
