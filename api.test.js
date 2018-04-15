@@ -28,7 +28,7 @@ describe('TEST REST API CRUD', () => {
         expect(testApi.ressourceUrl).toBe('http://127.0.0.1:3333/companies/');
     });
 
-    it('fetchResource()', () => {
+    it('get()', () => {
         fetchMock
             .getOnce(testApi.ressourceUrl, { body: { companies: ['do something'] }, headers: { 'content-type': 'application/json' } })
 
@@ -38,13 +38,13 @@ describe('TEST REST API CRUD', () => {
         ]
         const store = mockStore()
 
-        return store.dispatch(testApi.fetchResource()).then(() => {
+        return store.dispatch(testApi.get()).then(() => {
 
             expect(store.getActions()).toEqual(expectedActions)
         })
     })
 
-    it('addResource()', () => {
+    it('create()', () => {
         const param = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{"name":"Amazon"}' }
 
         fetchMock
@@ -58,13 +58,13 @@ describe('TEST REST API CRUD', () => {
 
         const store = mockStore()
 
-        return store.dispatch(testApi.addResource({name:'Amazon'})).then(() => {
+        return store.dispatch(testApi.create({name:'Amazon'})).then(() => {
 
             expect(store.getActions()).toEqual([{ type: 'CREATE_COMPANIES', payload: {id:1, name:'Amazon'} }])
         })
     })
 
-    it('updateResource()', () => {
+    it('update()', () => {
         const param = { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: '{"id":1,"name":"Google"}' }
 
         fetchMock
@@ -78,13 +78,13 @@ describe('TEST REST API CRUD', () => {
 
         const store = mockStore()
 
-        return store.dispatch(testApi.updateResource({id:1,name:'Google'})).then(() => {
+        return store.dispatch(testApi.update({id:1,name:'Google'})).then(() => {
 
             expect(store.getActions()).toEqual([{ type: 'UPDATE_COMPANIES', payload: {id:1, name:'Google'} }])
         })
     })
 
-    it('deleteResource()', () => {
+    it('delete()', () => {
         const param = { method: 'DELETE', headers: { 'Content-Type': 'application/json' }}
 
         fetchMock
@@ -98,7 +98,7 @@ describe('TEST REST API CRUD', () => {
 
         const store = mockStore()
 
-        return store.dispatch(testApi.deleteResource(1)).then(() => {
+        return store.dispatch(testApi.delete(1)).then(() => {
 
             expect(store.getActions()).toEqual([{ type: 'REMOVE_COMPANIES', payload: 1  }])
         })
@@ -148,7 +148,7 @@ describe('TEST REST API CRUD', () => {
     const testApiWithAuth = new API('companies')
     testApiWithAuth.auth()
 
-    it('fetchResource with auth', () => {
+    it('get with auth', () => {
         fetchMock
             .getOnce(testApiWithAuth.ressourceUrl, { body: { companies: ['do something'] }, headers: { 'content-type': 'application/json' } })
 
@@ -158,13 +158,13 @@ describe('TEST REST API CRUD', () => {
         ]
         const store = mockStore()
 
-        return store.dispatch(testApiWithAuth.fetchResource()).then(() => {
+        return store.dispatch(testApiWithAuth.get()).then(() => {
 
             expect(store.getActions()).toEqual(expectedActions)
         })
     })
 
-    it('addResource with auth', () => {
+    it('create with auth', () => {
         const param = { method: 'POST', headers: { 'Content-Type': 'application/json',Authorization: 'Bearer ' + token }, body: '{"name":"Amazon"}' }
 
         fetchMock
@@ -178,14 +178,14 @@ describe('TEST REST API CRUD', () => {
 
         const store = mockStore()
 
-        return store.dispatch(testApiWithAuth.addResource({name:'Amazon'})).then(() => {
+        return store.dispatch(testApiWithAuth.create({name:'Amazon'})).then(() => {
 
             expect(store.getActions()).toEqual([{ type: 'CREATE_COMPANIES', payload: {id:1, name:'Amazon'} }])
         })
     })
 
 
-    it('updateResource() with auth', () => {
+    it('update() with auth', () => {
         const param = { method: 'PUT', headers: { 'Content-Type': 'application/json',Authorization: 'Bearer ' + token }, body: '{"id":1,"name":"Google"}' }
 
         fetchMock
@@ -199,13 +199,13 @@ describe('TEST REST API CRUD', () => {
 
         const store = mockStore()
 
-        return store.dispatch(testApiWithAuth.updateResource({id:1,name:'Google'})).then(() => {
+        return store.dispatch(testApiWithAuth.update({id:1,name:'Google'})).then(() => {
 
             expect(store.getActions()).toEqual([{ type: 'UPDATE_COMPANIES', payload: {id:1, name:'Google'} }])
         })
     })
 
-    it('deleteResource() with auth', () => {
+    it('delete() with auth', () => {
         const param = { method: 'DELETE', headers: { 'Content-Type': 'application/json' ,Authorization: 'Bearer ' + token }}
 
         fetchMock
@@ -219,7 +219,7 @@ describe('TEST REST API CRUD', () => {
 
         const store = mockStore()
 
-        return store.dispatch(testApiWithAuth.deleteResource(1)).then(() => {
+        return store.dispatch(testApiWithAuth.delete(1)).then(() => {
 
             expect(store.getActions()).toEqual([{ type: 'REMOVE_COMPANIES', payload: 1  }])
         })
