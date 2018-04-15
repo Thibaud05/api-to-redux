@@ -10,7 +10,7 @@ A simple class for consume REST API in React with Redux
 - fetch-mock
 
 # How use it ?
-## Fetch, create, update and remove a ressource
+## create, update, read and delete a ressource
 
 First define your url and version in `apiConfig.js`
 
