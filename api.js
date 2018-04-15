@@ -17,7 +17,6 @@ class API
 
         // Build base url
         this.url = config.url + '/' + config.version
-
         this.ressourceUrl = this.url + resourceName + '/'
 
         // Build actions
@@ -73,7 +72,7 @@ class API
      * @param  {string} id - the resource id
      * @return {object} a redux action
      */
-    fetchResource(id='')
+    get(id='')
     {
         return (dispatch) => {
             dispatch(this.actions.requestResource())
@@ -94,7 +93,7 @@ class API
      * @param  {boolean} useJson - For use json format in the request
      * @return {object} a redux action
      */
-    addResource(resource,useJson = true)
+    create(resource,useJson = true)
     {
         return (dispatch) => {
             let param = this.getParam('POST',useJson,resource)
@@ -111,7 +110,7 @@ class API
      * @param  {number} resource.id - resource id
      * @param  {boolean} useJson - For use json format in the request
      */
-    updateResource(resource,useJson = true)
+    update(resource,useJson = true)
     {
         return (dispatch) => {
             let param = this.getParam('PUT',useJson,resource)
@@ -126,7 +125,7 @@ class API
      * @param  {number} id - the resource id
      * @return {object} a redux action
      */
-    deleteResource(id)
+    delete(id)
     {
         return (dispatch) => {
             const param = this.getParam('DELETE')
