@@ -17,16 +17,16 @@ First define your url and version in `apiConfig.js`
 ```javascript
 let apiCompany = new API('companies')
 
-apiCompany.fetchResource()
+apiCompany.get()
 // HTTPS GET api.awesome.com/companies, dispatch REQUEST_COMPANIES and RECEIVE_COMPANIES
 
-apiCompany.addResource({name:'Amazon'})
+apiCompany.create({name:'Amazon'})
 // HTTPS POST api.awesome.com/companies and dispatch CREATE_COMPANIES
 
-apiCompany.updateResource({id:1,name:'Google'})
+apiCompany.update({id:1,name:'Google'})
 // HTTPS PUT api.awesome.com/companies and dispatch UPDATE_COMPANIES
 
-apiCompany.deleteResource(1)
+apiCompany.delete(1)
 // HTTPS DELETE api.awesome.com/companies/1 and dispatch REMOVE_COMPANIES
 ```
 
@@ -40,7 +40,7 @@ apiAuth.login(credential)
 
 let apiCompany = new API('companies')
 apiCompany.auth()
-apiCompany.fetchResource()
+apiCompany.get()
 // HTTPS GET api.awesome.com/companies, dispatch REQUEST_COMPANIES and RECEIVE_COMPANIES
 ```
 
@@ -49,16 +49,16 @@ apiCompany.fetchResource()
 let apiLeaders = new API('leaders')
 apiLeaders.nested('companies',1)
 
-apiLeaders.fetchResource()
+apiLeaders.get()
 // HTTPS GET api.awesome.com/companies/1/leaders, dispatch REQUEST_LEADERS and RECEIVE_LEADERS
 
-apiLeaders.addResource({name:'Larry Page'})
+apiLeaders.create({name:'Larry Page'})
 // HTTPS POST api.awesome.com/companies/1/leaders and dispatch CREATE_LEADERS
 
-apiLeaders.updateResource({id:1,name:'Sundar Pichai'})
+apiLeaders.update({id:1,name:'Sundar Pichai'})
 // HTTPS PUT api.awesome.com/companies/1/leaders and dispatch UPDATE_LEADERS
 
-apiLeaders.deleteResource(1)
+apiLeaders.delete(1)
 // HTTPS DELETE api.awesome.com/companies/1/leaders/1 and dispatch REMOVE_LEADERS
 ```
 
@@ -68,6 +68,6 @@ let apiCompany = new API('companies')
 const useJson = false
 const pictureFile = event.target.files[0]
 // get the picture file with onChange on <imput type="file" onChange={onChangeFile} >
-apiLeaders.addResource({name:'Larry Page',picture:pictureFile},useJson)
+apiLeaders.create({name:'Larry Page',picture:pictureFile},useJson)
 // HTTPS POST api.awesome.com/companies/1/leaders and dispatch CREATE_LEADERS
 ```
